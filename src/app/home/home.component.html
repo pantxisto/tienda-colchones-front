@@ -1,0 +1,86 @@
+<div class="example-container mat-elevation-z8">
+    <div class="example-loading-shade"
+         *ngIf="isLoadingResults || isRateLimitReached">
+      <mat-spinner *ngIf="isLoadingResults"></mat-spinner>
+      <div class="example-rate-limit-reached" *ngIf="isRateLimitReached">
+        GitHub's API rate limit has been reached. It will be reset in one minute.
+      </div>
+    </div>
+  
+    <div class="example-table-container">
+  
+      <table mat-table [dataSource]="data" class="example-table">
+        <!-- Number Column -->
+        <ng-container matColumnDef="nombre">
+          <th mat-header-cell *matHeaderCellDef>Nombre</th>
+          <td mat-cell *matCellDef="let row"><a href="productos/{{row._id}}" >{{row.name}}</a></td>
+        </ng-container>
+  
+        <!-- Title Column -->
+        <ng-container matColumnDef="tipo">
+          <th mat-header-cell *matHeaderCellDef>Tipo</th>
+          <td mat-cell *matCellDef="let row">{{row.type}}</td>
+        </ng-container>
+  
+        <!-- State Column -->
+        <ng-container matColumnDef="precio">
+          <th mat-header-cell *matHeaderCellDef>Precio</th>
+          <td mat-cell *matCellDef="let row">{{row.prize}}€</td>
+        </ng-container>
+  
+        <!-- State Column -->
+        <ng-container matColumnDef="actions">
+          <th mat-header-cell *matHeaderCellDef>Acciones</th>
+          <td mat-cell *matCellDef="let row">
+              <a (click)="deleteProduct(row._id)" style="cursor: pointer">
+                <i class="material-icons">delete</i>
+              </a>
+          </td>
+        </ng-container>
+        
+  
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+      </table>
+    </div>
+  
+    <mat-paginator [length]="resultsLength" [pageSize]="4"></mat-paginator>
+  </div>
+
+  <a *ngIf="isAdmin && router.url !== '/'" class="waves-effect waves-light blue btn right" style="margin-top:5px" (click)="createProduct()">Añadir <span *ngIf="isSomier"> somier</span> <span *ngIf="!isSomier"> colchon</span></a>
+
+  <!-- Modal Structure -->
+  <div id="modal1" class="modal">
+    <div class="modal-content">
+        <form ngNativeValidate #productForm="ngForm" (ngSubmit)="addProduct(productForm)" enctype="multipart/form-data">
+            <div class="row">
+                <input type="hidden" name="type" #type="ngModel" [(ngModel)]="_type">
+                <input type="hidden" name="favorite" #favorite="ngModel" [(ngModel)]="_favorite">
+                <input type="hidden" name="imagePath" #imagePath="ngModel" [(ngModel)]="_imagePath">
+
+                <div class="input-field col s12">
+                    <input type="text" name="name" #name="ngModel" [(ngModel)]="_name" placeholder="Nombre del producto" required>
+                </div>
+
+                <div class="input-field col s12">
+                    <input type="text" name="prize" #name="ngModel" [(ngModel)]="_prize" placeholder="Precio del producto con ." required>
+                </div>
+
+                <div class="input-field col s12">
+                    <textarea id="textarea1" name="description" #description="ngModel" [(ngModel)]="_description" class="materialize-textarea" placeholder="Descripción del producto" required></textarea>
+                </div>
+
+                <input name="image" type="file" (change)="onFileSelect($event)" required accept="image/png, image/jpeg"/>
+                
+                <div class="card-action">
+                    <div class="input-field col s12">
+                        <button type="submit" class="btn right" style="margin-left: 2px">Crear<span *ngIf="isSomier"> somier</span> <span *ngIf="!isSomier"> colchon</span></button>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+    <div class="modal-footer">
+        <button class="modal-close waves-effect waves-green btn-flat">Cerrar modal</button>
+      </div>
+  </div>

@@ -1,0 +1,60 @@
+<div class="row">
+    <div class="col s12 m7">
+      <div class="card" *ngIf="product !== undefined">
+        <div class="card-image">
+          <img src="{{URI}}{{product.imagePath}}">
+        </div>
+        <div class="card-content">
+            <h5>{{product.name}}</h5><br>
+            <p>{{product.description}}</p><br>
+            <p>{{product.prize}} €</p>
+        </div>
+        <div class="card-action" *ngIf="isAdmin">
+            <a (click)="deleteProduct()" style="cursor: pointer" title="borrar">
+                <i class="material-icons">delete</i>
+            </a>
+            <a (click)="editProduct()" style="cursor: pointer" title="editar">
+                <i class="material-icons">edit</i>
+            </a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal Structure -->
+  <div id="modal1" class="modal">
+    <div class="modal-content" *ngIf="updatedProduct !== undefined">
+        <form ngNativeValidate #productForm="ngForm" (ngSubmit)="updateProduct(productForm)" enctype="multipart/form-data">
+            <div class="row">
+                <input type="hidden" name="_id" #_id="ngModel" [(ngModel)]="updatedProduct._id">
+                <input type="hidden" name="type" #type="ngModel" [(ngModel)]="updatedProduct.type">
+                <input type="hidden" name="favorite" #favorite="ngModel" [(ngModel)]="updatedProduct.favorite">
+                <input type="hidden" name="imagePath" #imagePath="ngModel" [(ngModel)]="updatedProduct.imagePath">
+
+                <div class="input-field col s12">
+                    <input type="text" name="name" #name="ngModel" [(ngModel)]="updatedProduct.name" placeholder="Nombre del producto" required>
+                </div>
+
+                <div class="input-field col s12">
+                    <input type="text" name="prize" #name="ngModel" [(ngModel)]="updatedProduct.prize" placeholder="Precio del producto con ." required>
+                </div>
+
+                <div class="input-field col s12">
+                    <textarea id="textarea1" name="description" #description="ngModel" [(ngModel)]="updatedProduct.description" class="materialize-textarea" required placeholder="Descripción del producto"></textarea>
+                </div>
+
+                <input name="image" type="file" (change)="onFileSelect($event)" accept="image/png, image/jpeg"/>
+                
+                <div class="card-action">
+                    <div class="input-field col s12">
+                        <button type="submit" class="btn right" style="margin-left: 2px">Actualizar</button>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+    <div class="modal-footer">
+        <button class="modal-close waves-effect waves-green btn-flat">Cerrar modal</button>
+      </div>
+  </div>
+ 
